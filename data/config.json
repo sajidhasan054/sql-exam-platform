@@ -1,0 +1,18 @@
+{
+  "githubOwner": "YOUR_GITHUB_USERNAME",
+  "githubRepo": "YOUR_REPO_NAME",
+  "githubBranch": "main",
+  "googleFormActionUrl": "",
+  "googleFormEntryIds": {
+    "candidateName": "",
+    "candidateEmail": "",
+    "examId": "",
+    "examTitle": "",
+    "score": "",
+    "totalQuestions": "",
+    "pasteAttempts": "",
+    "timeTakenSeconds": "",
+    "answersJson": ""
+  },
+  "resultsSheetViewUrl": ""
+}

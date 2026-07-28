@@ -1,0 +1,172 @@
+[
+  {
+    "id": "q1",
+    "schemaId": "hr_payroll",
+    "title": "Employee & Department Inner Join",
+    "type": "mcq",
+    "difficulty": "Easy",
+    "question": "How do you write a query to retrieve all columns from the employees and departments tables where the department_id matches?",
+    "options": [
+      { "id": "A", "text": "SELECT * FROM employees INNER JOIN departments ON employees.department_id = departments.department_id;" },
+      { "id": "B", "text": "SELECT * FROM employees JOIN departments WHERE employees.department_id = departments.department_id;" },
+      { "id": "C", "text": "SELECT * FROM employees LEFT JOIN departments ON employees.department_id = departments.department_id;" }
+    ],
+    "correct": "A",
+    "explanation": "INNER JOIN returns only matching rows across both tables on department_id."
+  },
+  {
+    "id": "q2",
+    "schemaId": "hr_payroll",
+    "title": "Filtering Aggregated Salaries",
+    "type": "mcq",
+    "difficulty": "Medium",
+    "question": "Which SQL query finds the average salary for each department, but only includes departments with an average salary greater than 50,000?",
+    "options": [
+      { "id": "A", "text": "SELECT department_id, AVG(salary) FROM employees WHERE AVG(salary) > 50000 GROUP BY department_id;" },
+      { "id": "B", "text": "SELECT department_id, AVG(salary) FROM employees GROUP BY department_id HAVING AVG(salary) > 50000;" },
+      { "id": "C", "text": "SELECT department_id, AVG(salary) FROM employees GROUP BY department_id WHERE AVG(salary) > 50000;" },
+      { "id": "D", "text": "SELECT department_id, AVG(salary) FROM employees HAVING AVG(salary) > 50000 GROUP BY department_id;" }
+    ],
+    "correct": "B",
+    "explanation": "The HAVING clause filters group results after aggregation (AVG)."
+  },
+  {
+    "id": "q3",
+    "schemaId": "hr_payroll",
+    "title": "Subquery Comparison",
+    "type": "mcq",
+    "difficulty": "Medium",
+    "question": "Which SQL query retrieves all employees whose salary is greater than the overall average salary?",
+    "options": [
+      { "id": "A", "text": "SELECT * FROM employees WHERE salary > (SELECT AVG(salary) FROM employees);" },
+      { "id": "B", "text": "SELECT * FROM employees WHERE salary > AVG(salary);" },
+      { "id": "C", "text": "SELECT * FROM employees WHERE salary > ALL (SELECT AVG(salary) FROM employees);" },
+      { "id": "D", "text": "SELECT * FROM employees WHERE salary IN (SELECT AVG(salary) FROM employees);" }
+    ],
+    "correct": "A",
+    "explanation": "A subquery computes the aggregate average before comparing against individual employee rows."
+  },
+  {
+    "id": "q4",
+    "schemaId": "hr_payroll",
+    "title": "Department Headcount",
+    "type": "mcq",
+    "difficulty": "Easy",
+    "question": "Which SQL statement will count the total number of employees in each department?",
+    "options": [
+      { "id": "A", "text": "SELECT department_id, COUNT(*) FROM employees;" },
+      { "id": "B", "text": "SELECT department_id, COUNT(*) FROM employees GROUP BY department_id;" },
+      { "id": "C", "text": "SELECT COUNT(department_id) FROM employees GROUP BY department_id;" },
+      { "id": "D", "text": "SELECT department_id, COUNT(department_id) FROM employees;" }
+    ],
+    "correct": "B",
+    "explanation": "GROUP BY department_id is required when selecting non-aggregated column department_id with COUNT(*)."
+  },
+  {
+    "id": "q5",
+    "schemaId": "olist",
+    "title": "Orders & Customers Linking",
+    "type": "mcq",
+    "difficulty": "Easy",
+    "question": "How would you write a query to combine rows from orders and customers where customer_id matches?",
+    "options": [
+      { "id": "A", "text": "SELECT * FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id;" },
+      { "id": "B", "text": "SELECT * FROM orders JOIN customers WHERE orders.customer_id = customers.customer_id;" },
+      { "id": "C", "text": "SELECT * FROM orders LEFT JOIN customers ON orders.customer_id = customers.customer_id;" },
+      { "id": "D", "text": "SELECT * FROM orders RIGHT JOIN customers ON orders.customer_id = customers.customer_id;" }
+    ],
+    "correct": "A",
+    "explanation": "INNER JOIN with an explicit ON clause is standard SQL syntax."
+  },
+  {
+    "id": "q6",
+    "schemaId": "olist",
+    "title": "Sales per Category (Including Zero Sales)",
+    "type": "mcq",
+    "difficulty": "Hard",
+    "question": "How would you find total sales per product category, INCLUDING categories without any order items?",
+    "options": [
+      { "id": "A", "text": "SELECT products.product_category_name, SUM(order_items.price) FROM orders RIGHT JOIN order_items ON orders.order_id = order_items.order_id RIGHT JOIN products ON order_items.product_id = products.product_id GROUP BY products.product_category_name;" },
+      { "id": "B", "text": "SELECT products.product_category_name, SUM(order_items.price) FROM orders JOIN order_items USING(order_id) JOIN products USING(product_id) GROUP BY products.product_category_name;" },
+      { "id": "C", "text": "SELECT products.product_category_name, SUM(order_items.price) FROM products LEFT JOIN order_items ON products.product_id = order_items.product_id LEFT JOIN orders ON order_items.order_id = orders.order_id GROUP BY products.product_category_name;" },
+      { "id": "D", "text": "SELECT products.product_category_name, SUM(order_items.price) FROM orders INNER JOIN order_items ON orders.order_id = order_items.order_id INNER JOIN products ON order_items.product_id = products.product_id GROUP BY products.product_category_name;" }
+    ],
+    "correct": "C",
+    "explanation": "Starting from products table with LEFT JOIN preserves all product categories even when sales are NULL."
+  },
+  {
+    "id": "q7",
+    "schemaId": "yassir_delivery",
+    "title": "The Algiers Scenario: Code Review & Refactoring",
+    "type": "scenario",
+    "difficulty": "Hard",
+    "question": "Analyze the query designed to return \"the order value of every Algiers user's 2nd completed order\". Point out the logical flaws and provide a corrected SQL query.",
+    "buggySql": "WITH RankedOrders AS (\n    SELECT u.user_id, o.order_id, o.order_value, o.order_status,\n    ROW_NUMBER() OVER (ORDER BY o.order_timestamp ASC) AS order_sequence\n    FROM users u JOIN orders o ON u.user_id = o.user_id\n    WHERE u.city = 'Algiers' \n)\nSELECT user_id, order_id, order_value FROM RankedOrders\nWHERE order_sequence = 2 AND order_status = 'completed';",
+    "correctSql": "WITH RankedOrders AS (\n    SELECT u.user_id, o.order_value,\n    ROW_NUMBER() OVER (\n        PARTITION BY u.user_id \n        ORDER BY o.order_timestamp ASC\n    ) AS order_sequence\n    FROM users u\n    JOIN orders o ON u.user_id = o.user_id\n    WHERE u.city = 'Algiers' \n      AND o.order_status = 'completed'\n)\nSELECT user_id, order_value\nFROM RankedOrders WHERE order_sequence = 2;",
+    "explanation": "Two bugs: (1) no PARTITION BY user_id, so numbering runs across all Algiers users instead of per-user; (2) filtering order_status after ranking means the '2nd row' may not even be a completed order \u2014 the status filter must happen before ranking."
+  },
+  {
+    "id": "q8",
+    "schemaId": "yassir_delivery",
+    "title": "Active Users without Cancelled Orders",
+    "type": "mcq",
+    "difficulty": "Medium",
+    "question": "Which query selects users who placed orders, but NEVER had a single order with order_status = \"cancelled\"?",
+    "options": [
+      { "id": "A", "text": "SELECT user_id FROM orders WHERE order_status != \"cancelled\";" },
+      { "id": "B", "text": "SELECT DISTINCT user_id FROM orders WHERE user_id NOT IN (SELECT user_id FROM orders WHERE order_status = \"cancelled\");" },
+      { "id": "C", "text": "SELECT user_id FROM orders GROUP BY user_id HAVING order_status != \"cancelled\";" },
+      { "id": "D", "text": "SELECT DISTINCT user_id FROM orders WHERE order_status IS NULL;" }
+    ],
+    "correct": "B",
+    "explanation": "Option B excludes any user_id that appears in the list of users with at least one cancelled order."
+  },
+  {
+    "id": "q9",
+    "schemaId": "fintech",
+    "title": "Wallet Balance Running Total",
+    "type": "mcq",
+    "difficulty": "Hard",
+    "question": "Which Window Function clause calculates a running total sum of transaction amounts ordered by created_at?",
+    "options": [
+      { "id": "A", "text": "SUM(amount) OVER (ORDER BY created_at ASC)" },
+      { "id": "B", "text": "SUM(amount) GROUP BY created_at" },
+      { "id": "C", "text": "RUNNING_SUM(amount) OVER (ORDER BY created_at)" },
+      { "id": "D", "text": "CUMULATIVE(amount) OVER (PARTITION BY transaction_id)" }
+    ],
+    "correct": "A",
+    "explanation": "SUM() combined with OVER (ORDER BY created_at) produces an unbounded preceding running total."
+  },
+  {
+    "id": "q10",
+    "schemaId": "yassir_delivery",
+    "title": "Driver Rating Percentile Ranking",
+    "type": "mcq",
+    "difficulty": "Medium",
+    "question": "To find the top 10% highest rated drivers per city, which window function is best suited?",
+    "options": [
+      { "id": "A", "text": "DENSE_RANK() OVER (PARTITION BY city ORDER BY rating DESC)" },
+      { "id": "B", "text": "NTILE(10) OVER (PARTITION BY city ORDER BY rating DESC)" },
+      { "id": "C", "text": "ROW_NUMBER() OVER (ORDER BY rating DESC)" },
+      { "id": "D", "text": "COUNT(rating) OVER (PARTITION BY city)" }
+    ],
+    "correct": "B",
+    "explanation": "NTILE(10) splits rows into 10 equal buckets per city, where bucket 1 represents the top 10% percentile."
+  },
+  {
+    "id": "q11",
+    "schemaId": "olist",
+    "title": "Finding Duplicate Orders",
+    "type": "mcq",
+    "difficulty": "Easy",
+    "question": "How do you check if there are duplicate order_ids in the order_items table?",
+    "options": [
+      { "id": "A", "text": "SELECT order_id, COUNT(*) FROM order_items GROUP BY order_id HAVING COUNT(*) > 1;" },
+      { "id": "B", "text": "SELECT order_id FROM order_items WHERE COUNT(order_id) > 1;" },
+      { "id": "C", "text": "SELECT DISTINCT order_id FROM order_items WHERE order_id IS DUPLICATE;" },
+      { "id": "D", "text": "SELECT order_id, SUM(order_item_id) FROM order_items GROUP BY order_id;" }
+    ],
+    "correct": "A",
+    "explanation": "GROUP BY order_id paired with HAVING COUNT(*) > 1 surfaces order_ids that repeat more than once."
+  }
+]

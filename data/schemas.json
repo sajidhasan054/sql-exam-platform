@@ -1,0 +1,39 @@
+{
+  "olist": {
+    "id": "olist",
+    "name": "Olist E-Commerce Marketplace",
+    "tables": [
+      { "name": "customers", "cols": ["customer_id (PK)", "customer_unique_id", "customer_state", "city"] },
+      { "name": "orders", "cols": ["order_id (PK)", "customer_id (FK)", "order_status", "order_purchase_timestamp"] },
+      { "name": "order_items", "cols": ["order_id (FK)", "order_item_id (PK)", "product_id (FK)", "price", "freight_value"] },
+      { "name": "products", "cols": ["product_id (PK)", "product_category_name", "product_weight_g"] }
+    ]
+  },
+  "yassir_delivery": {
+    "id": "yassir_delivery",
+    "name": "Yassir Last-Mile Delivery",
+    "tables": [
+      { "name": "users", "cols": ["user_id (PK)", "name", "email", "city", "signup_date"] },
+      { "name": "orders", "cols": ["order_id (PK)", "user_id (FK)", "driver_id (FK)", "order_status", "order_value", "order_timestamp"] },
+      { "name": "drivers", "cols": ["driver_id (PK)", "vehicle_type", "rating", "city"] },
+      { "name": "city_geofence", "cols": ["city_id (PK)", "city_name", "base_fare", "surge_multiplier"] }
+    ]
+  },
+  "hr_payroll": {
+    "id": "hr_payroll",
+    "name": "Corporate HR & Payroll",
+    "tables": [
+      { "name": "employees", "cols": ["employee_id (PK)", "first_name", "last_name", "department_id (FK)", "salary", "hire_date"] },
+      { "name": "departments", "cols": ["department_id (PK)", "department_name", "manager_id"] },
+      { "name": "performance_reviews", "cols": ["review_id (PK)", "employee_id (FK)", "rating", "review_year"] }
+    ]
+  },
+  "fintech": {
+    "id": "fintech",
+    "name": "Fintech Payments & Wallets",
+    "tables": [
+      { "name": "accounts", "cols": ["account_id (PK)", "user_id (FK)", "currency", "balance"] },
+      { "name": "transactions", "cols": ["transaction_id (PK)", "sender_acc (FK)", "receiver_acc (FK)", "amount", "status", "created_at"] }
+    ]
+  }
+}
